@@ -1,0 +1,13 @@
+#include<stdio.h>
+
+float factorial(int number) {
+	if(number <= 1)
+		return 1;
+	return number*factorial(number-1);
+}
+
+int main(void) {
+	printf("Factorial of 10 is: %.2f", factorial(10));
+	getchar();
+	return 0;
+}
