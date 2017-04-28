@@ -1,0 +1,15 @@
+#include<stdio.h>
+
+int main(void) {
+    int i;        //记录循环次数
+    int a = 1;    //记录桃子数量 
+    
+    for(i = 1; i < 10; i++) {
+        a = (a+1) * 2; 
+    } 
+    
+    printf("%d", a);
+    getchar();
+    
+    return 0;
+}
