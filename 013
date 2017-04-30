@@ -1,0 +1,25 @@
+#include<stdio.h>
+#include<conio.h>
+
+int main(void) {
+    int x, y;
+    int result = 1;
+    
+    scanf("%d%d", &x, &y);
+    
+    for(int i = 0; i < y; i++) {
+        result = result * x % 1000; 
+    }
+    
+    printf("The result is：");
+    if (result >= 100) {
+        printf("%d", result);
+    } else if (result >= 10) {
+        printf("0%d", result);
+    } else {
+        printf("00%d", result);
+    }
+    
+    getch();
+    return 0;
+}
