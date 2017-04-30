@@ -1,0 +1,29 @@
+#include<stdio.h>
+#include<conio.h>
+
+int main(void) {
+    char leap[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    char nonleap[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    
+    int year;
+    int month;
+    int day;
+    int result = 0;
+    scanf("%d%d%d", &year, &month, &day);
+    
+    if(year%100 != 0 && year%4 == 0) {
+        for(int i = 0; i < month-1; i++) {
+            result += leap[i];
+        }
+        result += day;
+    }
+    for(int i = 0; i < month-1; i++) {
+        result += nonleap[i];
+    }
+    result += day;
+     
+    printf("It is the NO.%d day of %d.", result, year);
+    
+    getch();
+    return 0;
+}
