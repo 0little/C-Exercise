@@ -1,0 +1,18 @@
+#include<stdio.h>
+
+int main(void) {
+    int count;     //当天买的苹果个数 
+    int day;       //天数 
+    int apples = 0;    //苹果总个数
+    float result;  //平均每天的花费
+    
+    for(count = 2, day = 0; count < 100; count *= 2) {
+        apples += count;
+        day++;
+    }
+    
+    printf("The result is: %f.", apples*0.8/day); 
+     
+    getchar();
+    return 0;
+}
