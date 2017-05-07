@@ -1,0 +1,26 @@
+#include<stdio.h>
+
+#define MAX 100
+
+int main(void) {
+	int n;
+	int a[MAX] = {0};
+	int b[MAX] = {0};
+	int i;                        //记录数组下标 
+	int temp = 0;                 //当前车上人数 
+	int result = 0;       
+	
+	scanf("%d", &n);
+	
+	for(i = 0; i < n; i++) {
+		scanf("%d%d", &a[i], &b[i]);
+		temp = temp - a[i] + b[i];
+		if(temp > result) {
+			result = temp;
+		}
+	}
+	
+	printf("%d", result);
+	
+	return 0;
+}
