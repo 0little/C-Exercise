@@ -1,0 +1,32 @@
+#include<stdio.h>
+ 
+ #define MAX 10001
+ 
+ int main(void) {
+ 	char array[MAX] = {0};   //此数组用于表示最多的这10001盏路灯，初始值为0，表示都没有被移除。
+	int m;                   //马路的长度
+	int n;                   //区域的数目
+	int i;                   //用于记录数组下标
+	int head;                //区域的起始坐标
+	int tail;                //区域的结束坐标
+	int result = 0;
+	
+	scanf("%d%d", &m, &n);
+	
+	while(n--) {
+		scanf("%d%d", &head, &tail);
+		for(i = head; i <= tail; i++) {
+			array[i] = 1;                   //赋值为1，表示该坐标上的路灯被移除 
+		}
+	} 
+	
+	for(i = 0; i <= m; i++) {
+		if(array[i] == 0) {
+			result++;
+		}
+	}
+ 	
+ 	printf("%d", result);
+ 	
+ 	return 0;
+ } 
