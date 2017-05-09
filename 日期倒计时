@@ -1,0 +1,69 @@
+/*******************************************************************************************************************
+ *在经济、科技日益发达的今天，人们对时间的把握越来越严格，对于一个一定影响力的公司的高管来说，他可能要将自己的行程                 *
+ *提前安排到下个月。对于普通人来说，他也可能将几天之后的安排已经提前做好。请设计一个程序计算出今天距离未来的某一天                 *
+ *还剩多少天。假设今天是2015年10月18日。                                                                               *
+ *输入:输入一个日期格式为yyyy-MM-dd，不考虑日期是否小于今天。                                                             *
+ *输出:输出一个数字表示今天（2015年10月18日）距离该日期还剩多少天。                                                        *
+ *******************************************************************************************************************/
+ #include<stdio.h> 
+ 
+ #define TRUE 1
+ #define FALSE 0
+ 
+ /*判断是否是闰年，是的话返回TRUE，不是的话返回FALSE*/
+ char isLeapYear(int year) {
+ 	if(year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+ 		return TRUE;
+	 } 
+	 
+	 return FALSE;
+ }
+ 
+ int main(void) {
+ 	char leap[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+ 	char unleap[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+ 	int year;
+ 	int month;
+ 	int day;
+ 	int days = 0;                   //2015年12月31日距今天有几天
+ 	int i;
+ 	int result = 0;
+	 
+	for(i = 10; i <= 12; i++) {
+		days += unleap[i - 1];
+	} 
+ 	days -= 18;
+ 	
+ 	scanf("%d-%d-%d", &year, &month, &day);
+ 	
+ 	/*若依旧是2015年，直接计算 */
+ 	if(year == 2015) {                            
+ 		for (i = 10; i < month; i++) {
+ 			result += unleap[i-1];
+		 }
+		 result = result - 18 + day;
+	 } else {
+	 	/*若不是2015年先算出当年的天数再加上2015年的天数，然后加上中间各整年的天数*/ 
+	 	for(i = 0; i < month-1; i++) {           
+	 		if(i == 1 && isLeapYear(year) == TRUE) {
+	 			result += leap[i];
+			 } else {
+			 	result += unleap[i];
+			 }
+		 }
+		 
+		 result = result + days + day;
+	 	
+		 while(--year > 2015) {
+		 	if(isLeapYear(year) == TRUE) {
+		 		result += 366;
+			 } else {
+			 	result += 365;
+			 }
+		 }	
+	 }
+	 
+ 	printf("%d", result);
+ 	return 0;
+ }
+
