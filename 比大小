@@ -1,0 +1,60 @@
+/***********************************************************************************************************************
+ *现在有"abcdefghijkl”12个字符，将其所有的排列中按字典序排列，给出任意一种排列，说出这个排列在所有的排列中是第几小的？*
+ *输入：第一行有一个整数n（0＜n＜=10000）;随后有n行，每行是一个排列；												   *
+ *输出：输出一个整数m，占一行，m表示排列是第几位； 																	   * 
+ *示例输入：																										   * 
+ *3																													   * 
+ *abcdefghijkl																										   * 
+ *hgebkflacdji																										   * 
+ *gfkedhjblcia																	   									   * 
+ ***********************************************************************************************************************/
+#include<stdio.h>
+
+#define USED 1
+#define UNUSED 0
+#define MAX 10000
+
+/*计算number的阶乘*/
+int factorial(int number) {
+	if(number <= 1) {
+		return 1;
+	}
+	
+	return number*factorial(number-1);
+}
+
+int function(char str[13]) {
+	char status[12] = {0};              //一个用于记录字母是否被用过的数组，初始值为0，表示都没有被用过
+	int i;                              //记录str数组下标
+	int j;                              //记录status数组下标 
+	int result = 0;
+	int temp;                           //用于记录比该字母小且没有被用过的字母的个数 
+
+	for(i = 0; i < 11; i++) {
+		status[str[i] - 'a'] = USED;
+		for(j = 0, temp = 0; j < str[i] - 'a'; j++) {
+			if(status[j] != USED) {
+				temp++;
+			} 
+		}
+		result += temp * factorial(11-i);                //计算出该排列之前有多少个排列 
+	} 
+	
+	return result + 1;	
+}
+
+int main(void) {
+	char str[13];                       //用于存放录入的那个排列
+	int k = 0;
+	int n;
+	
+	scanf("%d", &n);
+	
+	while(k < n) {
+		scanf("%s", str);
+		printf("%d\n", function(str));
+		k++;
+	}
+	
+	return 0;
+} 
