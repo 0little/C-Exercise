@@ -1,0 +1,62 @@
+/*
+给定一个字符串，问是否能够通过添加一个字母将其变成“回文串”。 “回文串”是指正着和反着读都一样的字符串。
+如：”aa”,”bob”,”testset”是回文串，”alice”,”time”都不是回文串。
+输入
+一行一个有小写字母构成的字符串，字符串长度不超过10。
+输出
+如果输入字符串可以通过添加一个字符，则输出”YES”，否则输出”NO”。
+*/
+#include<stdio.h> 
+#include<string.h>
+
+#define LEN 11
+
+#define TRUE 1
+#define FALSE 0
+
+char judge(char *str, int len) {
+	int i = 0;                          //从前向后记录str数组下标 
+	int flag = 0;                       //用于标记之前是否有元素不匹配
+	int j = len - 1;                    //从后向前记录数组下标 
+	
+	while(i <= j) {
+		if(str[i] != str[j]) {
+			if(flag == 1) {
+				return FALSE;
+			}
+			if(str[++i] == str[j]) {
+				continue;
+			} else if (str[--i] == str[--j]) {
+				continue;
+			} else {
+				return FALSE;
+			}
+		}
+		i++;
+		j--;
+	}
+	
+	return TRUE;
+}
+
+int main(void) {
+	char str[LEN] = {0};
+	int i = 0;                          //记录数组元素下标
+	int len;                            //记录字符串长度 
+
+	
+	do {
+		str[i] = getchar();
+	} while (str[i++] != '\n');
+	str[--i] = '\0';
+	
+	len = strlen(str);
+
+	if(TRUE == judge(str, len)) {
+		printf("YES");
+	} else {
+		printf("NO");
+	}
+	
+	return 0;
+}
