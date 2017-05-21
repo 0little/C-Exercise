@@ -1,0 +1,54 @@
+/*
+小赛特别爱购物，有一次他获得了在超市免费购物的机会，超市内有n件物品,第i（1<=i<=n）件物品的价值为ai，但是他能拿的物品的价值总和不能超过V。
+贪心的小易希望能拿尽量多数量的物品，那么请你帮他计算下他最多能拿到多少件物品？
+输入
+对于每组数据，第一行是两个整数n(1<=n<=100000)表示物品的数量和V（1<=V<=1000000），表示小易最多能拿的总价值，第二行n个整数，a1,a2..an.
+(1<=ai<=1000)表示每个物品的价值
+数据保证——
+50%的n<=1000,
+80%的n<=10000,
+100%的n<=100000.
+输出
+对于每组数据，输出一行。每行仅包含一个整数，表示小易最多能拿到的物品数量。
+*/
+
+#include<stdio.h>
+
+#define MAX 100000
+
+int main(void) {
+	int n;                      //能拿的商品数量
+    int v;                      //商品总价最大值
+	int price[MAX] = {0};       //存储各个商品价格的数组 
+	int i, j;                   //记录数组下标 
+	int temp;
+	int result;
+	
+	while(scanf("%d%d", &n, &v) != EOF) {
+		for(i = 0; i < n; i++) {
+			scanf("%d", &price[i]);
+		}
+		
+		for(i = 0; i < n; i++) {
+			for(j = n- 1; j > 0; j--) {
+				if(price[j] < price[j-1]) {
+					temp = price[j];
+					price[j] = price[j-1];
+					price[j-1] = temp;
+				}
+			}
+			result += price[i];
+			
+			if(result >= v) 
+				break; 
+		}
+		
+		if(result == v) {
+			printf("%d", i+1);
+		} else {
+			printf("%d", i);
+		}
+	}
+	
+	return 0;
+}
