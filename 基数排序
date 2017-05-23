@@ -1,0 +1,42 @@
+#include<stdio.h>
+
+#define MAX 10
+#define BASE 10
+
+int main(void) {
+	int data[MAX] = {2, 34, 555, 64, 1000, 3400, 20, 9, 3, 555}; //待排序的数组 
+	int queue[BASE][MAX] = {0};   //二维数组的每一行均为一个队列，临时存储指定位为该下标的元素 
+	int i = 0;                    //记录下标 
+	int j = 0;
+	int k = 0;
+	int pow = 1;                  //权值 
+	int len[BASE] = {0};          //记录各队列有效元素的个数
+	int temp;
+	
+	//四位以内的数字排序，权值小于10000
+	while(pow < 10000) {
+		for(i = 0; i < BASE; i++) {
+			len[i] = 0;
+		} 
+		//遍历整个数组，按当前指定位上的数字入各队列 
+		for(i = 0; i < MAX; i++) {
+			temp = data[i] / pow % BASE;        //计算得data[i]当前位上的数字 
+			queue[temp][len[temp]++] = data[i];
+		} 
+		i = 0;
+		/*各元素依次出队列，存入data数组*/
+		for(j = 0; j < BASE; j++) {
+			for(k = 0; k < len[j]; k++, i++) {
+				data[i] = queue[j][k];
+			} 
+		}
+		
+		pow *= BASE;                        //权值乘以基数，即可得下一次的权值 
+	} 
+	
+	for(i = 0; i < MAX; i++) {
+		printf("%d ", data[i]);
+	}
+	
+	return 0;
+}
