@@ -1,0 +1,85 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#define MAX 11
+#define N 8
+
+int hashtable[MAX];
+
+int func(int value) {
+	return value % MAX;    //哈希函数 
+}
+
+int search(int key) {    //自定义函数实现哈希查找 
+	int pos, t;
+	pos = func(key);     //哈希函数确定位置
+	t = pos;			 //t存放确定出的位置 
+	while (hashtable[t] != key && hashtable[t] != -1) {
+		t = (t+1) % MAX; //应用现行探测求出下一个位置 
+		if (pos == t) {
+		/*如果经过多次探测又回到原来用哈希函数求出的位置，则说明要查找的数字不存在*/
+			return -1;	
+		} 
+	}
+	
+	if(hashtable[t] == -1) {  //如果探测出的位置是-1，则说明查找的数不存在 
+		return -1;
+	}
+	
+	return t; 
+}
+
+void creathash(int key) {    //创建hash表 
+	int pos, t;
+	pos = func(key);         //hash函数确定元素位置 
+	t = pos;
+	while (hashtable[t] != -1) {
+		t = (t+1) % MAX;
+		if(pos == t) {       //hash表已满 
+			return;
+		} 
+	} 
+	
+	hashtable[t] = key;
+}
+
+int main(void) {
+	int flag[50] = {0};         //定义标记变量,初始值全为0，表示该数字没有出现过 
+	int i, j, t;
+	for (i = 0; i < MAX; i++) {
+		hashtable[i] = -1;     //hash表中初始值全置为-1 
+	} 
+	
+	srand((unsigned long)time(0)); //利用系统时间做种子产生随机数
+	
+	i = 0;
+	
+	while (i != N) {
+		t = rand() % 50;                 //产生一个50以内的随机数赋给t
+		if(flag[t] == 0) {				 //查看是否产生过t		                 
+			creathash(t);                //调用函数创建hash表
+			printf("%2d:", t);            //输出该元素
+			for(j = 0; j < MAX; j++) {
+				printf("(%2d)", hashtable[j]); //输出hash表的内容 
+			} 
+			
+			printf("\n");
+			flag[t] = 1;         //将产生的这个数标志为1
+			i++; 
+	    } 
+    }
+	    printf("请输入你要查找的元素：");
+		scanf("%d", &t);
+		if(t > 0 && t < 50) {
+			i = search(t);           //调用search函数进行hash查找
+			if(i != -1) {
+				printf("查找成功！其位置是：%d\n", i); //若查找出该元素则输出其位置 
+			} else {
+				printf("查找失败！");                  //未找到，输出提示信息 
+			}	
+	    } else {
+	    	printf("输入有误！");
+		}
+		
+	return 0;
+}
