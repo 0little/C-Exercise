@@ -1,0 +1,64 @@
+/*
+兰博和提莫闲聊之后，回归到了他们的正题，约德尔人的未来。说起约德尔人的未来，
+黑默丁格曾经提出了一个约德尔测试，将约德尔人的历史的每个阶段都用一个字符表达
+出来。(包括可写字符,不包括空格。)。然后将这个字符串转化为一个01串。转化规则
+是如果这个字符如果是字母或者数字，这个字符变为1,其它变为0。然后将这个01串和
+黑默丁格观测星空得到的01串做比较，得到一个相似率。相似率越高,则约德尔的未来
+越光明。
+请问:相似率为多少？
+输入
+每组输入数据为两行，第一行为有关约德尔人历史的字符串，第二行是黑默丁格观测星空得到的字符串。
+(两个字符串的长度相等,字符串长度不小于1且不超过1000。)
+输出
+输出一行，在这一行输出相似率。用百分数表示。
+(相似率为相同字符的个数/总个数,精确到百分号小数点后两位。printf("%%");输出一个%。)
+*/
+
+#include<stdio.h>
+
+#define MAX 1000
+
+int main(void) {
+	char inStr1[MAX] = {0};            //输入的字符串 
+	char inStr2[MAX] = {0};            //输入的01串 
+	char newStr[MAX] = {0};            //由字符串转换而成的01串 
+	int length = 0;                    //字符串长度 
+	int i;							   //数组下标
+	int sameNum = 0;                   //相同字母个数 
+	float result;
+	
+	do {                                  //录入字符串 
+		inStr1[length++] = getchar();
+	} while (inStr1[length-1] != '\n');
+	
+	inStr1[length--] = 0;
+	length = 0; 
+	
+	do {                                  //录入01串 
+		inStr2[length++] = getchar();
+	} while (inStr2[length-1] != '\n');
+	
+	inStr2[length--] = 0;
+	
+	for(i = 0; inStr1[i] != 0; i++) {       //将字符串转换为01序列 
+		if((inStr1[i] >= '0' && inStr1[i] <= '9') ||
+		   (inStr1[i] >= 'a' && inStr1[i] <= 'z') ||
+		   (inStr1[i] >= 'A' && inStr1[i] <= 'Z')) {
+		   	newStr[i] = '1';
+		   } else {
+		   	newStr[i] = '0';
+		   }   
+	}
+	
+	for(i = 0; i < length; i++) {             //对两个字符串进行比较 
+		if(newStr[i] == inStr2[i]) {
+			sameNum++;
+		} 
+	}
+	
+	result = (sameNum * 1.0)/ length * 100;
+	
+	printf("%.2f%%", result);
+	
+	return 0; 
+}
