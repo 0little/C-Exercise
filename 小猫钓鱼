@@ -1,0 +1,86 @@
+/*
+*小猫钓鱼纸牌游戏：A，B两人有相同数量的牌，（假定只有1-9），A先出牌，放到桌面上，然后B出牌放到桌面上已有牌
+*的上面，当出的牌和已有牌有相同的时，出牌人可拿回二者中间的所有牌，并放在手中牌的下面。直到其中一人没有牌，
+*游戏结束，有牌的一方获胜。 
+*/
+#include<stdio.h>
+
+/*定义一个队列*/
+struct queue {
+	int data[1000];
+	int head;
+	int tail;
+};
+
+/*定义一个栈*/
+struct stack {
+	int data[10];
+	int top;
+};
+//初始化双方手中的牌 
+void enterData(queue *q) {
+	for(q->tail = 0; q->tail < 6; q->tail++) {
+		scanf("%d", &q->data[q->tail]);
+	}
+}
+
+int main(void) {
+	struct queue q1, q2;    //声明两个队列，分别代表A和B手中的牌
+	struct stack s;         //声明一个栈，代表桌上的牌
+	int book[10] = {0};     //用于标记牌是否出现过
+	int temp;               //用于记录栈顶元素  
+	
+	//初始化队列和栈
+	q1.head = q1.tail = 0;
+	q2.head = q2.tail = 0;   
+	s.top = 0;
+	
+	//将A手中牌入队列
+	enterData(&q1);
+	//将B手中牌入队列
+	enterData(&q2); 
+	
+	//开始游戏，A先出牌 
+	s.data[s.top] = q1.data[q1.head++];
+	book[s.data[s.top++]] = 1;
+	
+	//当其中有一个队列为空时，结束游戏 
+	while (q1.head != q1.tail && q2.head != q2.tail) {
+		//B出牌
+		s.data[s.top] = q2.data[q2.head++];
+		//所出牌与桌子上的牌有相同的，B将赢得的牌放入自己的牌中 
+		if(book[s.data[s.top]] != 0) {
+			temp = s.data[s.top++];          
+			q2.data[q2.tail++] = s.data[--s.top]; 
+			while(temp != s.data[s.top-1]) {
+				q2.data[q2.tail++] = s.data[--s.top]; 
+				book[s.data[s.top]] = 0;	
+			}
+			s.top--;
+			q2.data[q2.tail++] = temp;
+			book[temp] = 0;
+		}
+		//A出牌
+		s.data[s.top] = q1.data[q1.head++];
+		//所出牌与桌子上的牌有相同的，A将赢得的牌放入自己的牌中 
+		if(book[s.data[s.top]] != 0) {
+			temp = s.data[s.top++];          
+			q1.data[q1.tail++] = s.data[--s.top]; 
+			while(temp != s.data[s.top-1]) {
+				q1.data[q1.tail++] = s.data[--s.top]; 
+				book[s.data[s.top]] = 0;	
+			}
+			s.top--;
+			q1.data[q1.tail++] = temp;
+			book[temp] = 0;
+		} 
+	}
+	
+	if(q2.head == q2.tail) {
+		printf("A获胜\n"); 
+	} else {
+		printf("B获胜\n"); 	
+	}
+	
+	return 0; 	
+}
