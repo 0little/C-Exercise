@@ -1,0 +1,44 @@
+/*
+模拟链表： 
+一个原始数组用于存储数据，一个right数组用于记录元素之间的位置关系 
+*/
+
+#include<stdio.h>
+
+int main(void) {
+	int data[10] = {0};
+	int right[10] = {0};
+	int i;
+	
+	//录入原始数据
+	for(i = 0; i < 9; i++) {
+		scanf("%d", &data[i]);
+	} 
+	
+	//初始化right数组
+	for(i = 0; i < 8; i++) {
+		right[i] = i+1;
+	} 
+	right[8] = 0;
+	
+	//插入一个数字
+	scanf("%d", &data[9]);
+	//改变right数组
+	for(i = 0; i < 9; i++) {
+		if(data[9] < data[i]) {
+			right[i-1] = 9;
+			right[9] = i;
+			break;
+		}
+	} 
+	
+	//输出插入数字后得到的数组
+	printf("%d ", data[0]);
+	i = 0;
+	while(right[i] != 0) {
+		i = right[i];
+		printf("%d ", data[i]);
+	}
+	
+	return 0;
+} 
