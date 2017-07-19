@@ -1,0 +1,54 @@
+/*
+火柴棍等式：
+小哼有n根火柴棍， 希望拼出A+B=C的等式，加号，等号都用两根火柴。
+先给出火柴根数问，最多能拼出多少个等式，要求火柴正好用完。   
+*/
+
+#include<stdio.h>
+
+//0-9每个数字所需的火柴棍个数 
+int number[10] = {6, 2, 5, 5, 4, 5, 6, 3, 7, 6};
+
+//计算两个加数所需的火柴棍个数 
+int calculate(int num1, int num2) {
+	return number[num1] + number[num2];
+}
+
+int main(void) {
+	//一个存储两个数相加共用火柴棍根数的数组 
+	int array[10][10] = {0};
+	int i;
+	int j;
+	int num;     //火柴棍根数 
+	int result = 0;
+	
+	for(i = 0; i < 10; i++) {
+		for(j = 0; j < 10; j++) {
+			array[i][j] = calculate(i, j);
+		}
+	}
+	
+	scanf("%d", &num); 
+	num = num - 4;
+	
+	//遍历整个二维数组 
+	for(i = 0; i < 10; i++) {
+		for(j = 0; j < 10; j++) {
+			if(array[i][j] >= num) {
+				break;
+			} else {
+				result = array[i][j]; 
+				result += number[(i+j) % 10];   //结果为一位数 
+				if((i+j)/10 != 0) {
+					result += 2;        //结果为两位数 
+				}
+				if(result == num) {
+					printf("%d + %d = %d\n", i, j, i+j);
+				}	
+			}
+		}
+	}
+	
+	return 0;
+	
+}
