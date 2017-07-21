@@ -1,0 +1,42 @@
+/*
+深度优先搜索：
+输入一个数字n，求出1-n的全排列。（n为1-9之间的整数） 
+*/
+
+#include<stdio.h>
+//此问题相当于把n张牌放到n个盒子中，a表示盒子，book用于记录牌是否已经用过 
+int a[10], book[10], n;
+
+void  dfs(int step) { //step表示现在站在哪个盒子面前 
+	int i;
+	if(step == n+1) { //说明前n个盒子已经放好扑克牌 
+		for(i = 1; i <= n; i++) {
+			printf("%d", a[i]);
+		} 
+		printf("\n");
+		
+		return; //返回之前的一步，（最近一次调用dfs 函数的一次） 
+	}
+	
+	/*此时站在第step个盒子面前，按照1-n的顺序依次尝试*/
+	for(i = 1; i <= n; i++) {
+		//判断扑克牌i是否在手上
+		if(book[i] == 0) {
+			a[step] = i;
+			book[i] = 1;
+		 
+			//第step个盒子已放好扑克牌，接下来走到step+1个盒子面前
+			dfs(step+1);
+			book[i] = 0;   //将刚才尝试的扑克牌收回，才能进行下一次尝试 
+		} 
+	} 
+	
+	return; 
+}
+
+int main(void) {
+	scanf("%d", &n); //输入的时候注意n为1-9之间的整数 
+	dfs(1); //首先站在一号盒子面前 
+	
+	return 0; 
+} 
