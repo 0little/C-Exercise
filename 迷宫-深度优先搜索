@@ -1,0 +1,74 @@
+/*
+迷宫问题：
+在迷宫中设置一个起点一个终点，求从起点到终点的最短路径。 
+*/ 
+#include<stdio.h>
+//迷宫的行数，列数，终点横坐标，终点纵坐标，最短路径 
+int row, col, endX, endY, min = 99999999;
+//表示迷宫的二维数组（其中1表示障碍物，0表示空地），标记某个坐标是否被走过 
+int a[50][50], book[50][50];
+
+void dfs(int x, int y, int step) {
+	int next[4][2] = {
+		{0, 1}, //向右走
+		{1, 0}, //向下走
+		{0, -1}, //向左走
+		{-1, 0}, // 向上走 
+	};
+	
+	int tx, ty, k; //下一步的横坐标，纵坐标
+	
+	//判断该位置是否为终点
+	if(x == endX && y == endY) {
+		//更新最小值
+		if(min > step) {
+			min = step;
+		} 
+		
+		return;
+	} 
+	
+	//枚举四种走法
+	for(k = 0; k < 4; k++) {
+		//计算下一个点的坐标
+		tx = x + next[k][0];
+		ty = y + next[k][1];
+		//判断是否越界
+		if(tx < 0 || tx >= row || ty < 0 || ty >= col) {
+			continue;
+		}  
+		//当该点不是障碍物且没有被走过时
+		if(a[tx][ty] == 0 && book[tx][ty] == 0) {
+			book[tx][ty] = 1; //标记这个点已经走过 
+			dfs(tx, ty, step+1); //尝试下一个点 
+			book[tx][ty] = 0; //取消标记 
+		} 
+	} 
+	
+	return; 
+} 
+
+int main(void) {
+	int i, j, startX, startY;
+	
+	//读入行数，列数
+	scanf("%d%d", &row, &col);
+	
+	//读入迷宫
+	for(i = 0; i < row; i++) {
+		for(j = 0; j < col; j++) {
+			scanf("%d", &a[i][j]);
+		}
+	} 
+	
+	//读入起点和终点坐标
+	scanf("%d%d%d%d", &startX, &startY, &endX, &endY);
+	
+	//从起点开始搜索
+	book[startX][startY] = 1;
+	dfs(startX, startY, 0); //初始步数为0 
+	
+	printf("%d", min); //输出最短路径 
+	
+	return 0;
+}
