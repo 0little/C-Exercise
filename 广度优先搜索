@@ -1,0 +1,77 @@
+/*迷宫问题（宽度优先搜索）*/
+
+#include<stdio.h>
+
+struct node {
+	int x; //横坐标 
+	int y; //纵坐标 
+	int step; //步数 
+}; 
+
+int main(void) {
+	//因为地图不超过50*50，因此队列不会超过2500个 
+	struct node que[2500];
+	int a[50][50] = {0}, book[50][50] = {0};
+	//定义一个表示走向的数组
+	int next[4][2] = {
+		{0, 1}, //向右 
+		{1, 0}, //向下
+		{0, -1}, //向左
+		{-1, 0}, //向上 
+	}; 
+	int row, col; 
+	int i, j, k;
+	int startX, startY, endX, endY;
+	int tx, ty;
+	int head, tail;
+	int flag = 0; //标记是否到达终点 
+	
+	scanf("%d%d", &row, &col);
+	for(i = 0; i < row; i++) {
+		for(j = 0; j < col; j++) {
+			scanf("%d", &a[i][j]);
+		}
+	}
+	scanf("%d%d%d%d", &startX, &startY, &endX, &endY);
+	
+	//初始化队列
+	head = 0;
+	tail = 1;
+	que[head].x = startX;
+	que[head].y = startY;
+	que[head].step = 0; 
+	book[startX][startY] = 1;
+	
+	while(head < tail) {
+		for(k = 0; k < 4; k++) {
+			tx = que[head].x + next[k][0];
+			ty = que[head].y + next[k][1];
+			//如果到目标点了，停止扩展，任务结束，循环停止
+			if(tx == endX && ty == endY) {
+				flag = 1;
+				break;
+			} 
+			//判断是否越界 
+			if(tx < 0 || tx >= row || ty < 0 || ty >= col) {
+				continue;
+			}
+			//确保该点没有走过且没有障碍物 
+			if(a[tx][ty] == 0 && book[tx][ty] == 0) {
+				book[tx][ty] = 1;
+				que[tail].x = tx;
+				que[tail].y = ty; 
+				que[tail].step = que[head].step + 1;
+				tail++;
+			} 
+			
+		}
+		//已经到达终点 
+		if(flag != 0) {
+			break;
+		}
+		head++;
+	}
+
+	printf("%d", que[head].step+1);
+	return 0;
+}
