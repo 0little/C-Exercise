@@ -1,0 +1,70 @@
+/*
+图的广度优先遍历（求得最少转机次数） 
+*/
+
+#include<stdio.h>
+
+struct node {
+	int x; //城市编号
+	int s; //转机次数 
+};
+
+int main(void) {
+	struct node que[50];
+	int a[50][50] = {0}, book[50] = {0};
+	int head, tail;
+	int i, j;
+	int n; //城市个数
+	int cur; //当前城市编号
+	int start, end; //开始城市编号，终点城市编号
+	int flag = 0; //标记是否找到最少转机次数的线路
+	
+	scanf("%d%d", &start, &end); 
+	
+	//初始化二维矩阵 
+	scanf("%d", &n);
+	for(i = 0; i < n; i++) {
+		for(j = 0; j < n; j++) {
+			scanf("%d", &a[i][j]);
+		}
+	} 
+	
+	//队列初始化
+	head = 0;
+	tail = 0;
+	//从编号为start的城市出发，将编号start入队
+	que[tail].x = start;
+	que[tail].s = 0;
+	tail++;
+	book[start] = 1; //标记编号为start的城市已经在队列中
+	
+	//当队列不为空时循环 
+	while(head < tail) {
+		cur = que[head].x; //当前队首城市的编号
+		for(i = 0 ; i < n; i++) {
+			//两者之间有航班 
+			if(a[cur][i] != 0) {
+				//该城市就是终点城市 
+				if(i == end) {
+					flag = 1;
+					break; 
+				}
+				//该城市不是终点，但没有被走过
+				if(book[i] == 0) {
+					que[tail].x = i;
+					que[tail].s = que[head].s+1;
+					tail++;
+					book[i] = 1;
+				} 
+			}
+		}
+		//已经找到最少转机次数的路线 
+		if(flag != 0) {
+			break;
+		}
+		head++; 
+	} 
+	
+	printf("%d", que[head].s);
+	return 0; 
+}
