@@ -1,0 +1,37 @@
+/*Floyd-Warshall算法*/ 
+#include<stdio.h>
+
+int main() {
+	int a[10][10];
+	int n; //顶点个数
+	int i, j, k;
+	
+	//录入图的信息 
+	scanf("%d", &n);
+	for(i = 0; i < n; i++) {
+		for(j = 0; j < n; j++) {
+			scanf("%d", &a[i][j]);
+		}
+	} 
+	
+	//Floyd-Warshall核心语句 
+	for(k = 0; k < n; k++) {
+		for(i = 0; i < n; i++) {
+			for(j = 0; j < n; j++) {
+				if(a[i][j] > a[i][k] + a[k][j]) {
+					a[i][j] = a[i][k] + a[k][j];
+				}
+			}
+		}
+	}
+	
+	//输出最终结果
+	for(i = 0; i < n; i++) {
+		for(j = 0; j < n; j++) {
+			printf("%10d", a[i][j]);
+		}
+		printf("\n");
+	}
+	
+	return 0; 
+}
