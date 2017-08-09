@@ -1,0 +1,51 @@
+/*Dijkstra算法（求0号顶点到其余各顶点的最短距离）*/
+#include<stdio.h>
+
+#define MAX 9999999
+
+int main(void) {
+	//初始化图矩阵
+	int a[6][6] = {
+	{0, 1, 12, MAX, MAX, MAX},
+	{MAX, 0, 9, 3, MAX, MAX},
+	{MAX, MAX, 0, MAX, 5, MAX},
+	{MAX, MAX, 4, 0, 13, 15},
+	{MAX, MAX, MAX, MAX, 0, 4},
+	{MAX, MAX, MAX, MAX, MAX, 0},
+	}; 
+	int dis[6] = {0};
+	int cur = 0, min;
+	int i, j;
+	int book[6] = {0};
+	book[0] = 1;
+	
+	for(i = 0; i < 6; i++) {
+		dis[i] = a[cur][i];
+	}
+	
+	for(j = 0; j < 6; j++) {
+		//如果是零号结点，初始最短距离结点取1;否则，取0 
+		min = (cur == 0) ? 1 : 0;
+		//寻找距离当前节点最近的一个结点 
+		for(i = 0; i < 6; i++) {
+			if(book[i] == 0 && a[cur][i] != 0 && a[cur][i] < a[cur][min]) {
+				min = i;
+			}
+		}
+		book[min] = 1;
+		//更新dis[6]数组
+		for(i = 0; i < 6; i++) {
+			if(dis[i] > dis[min] + a[min][i]) {
+				dis[i] = dis[min] + a[min][i];
+			}
+		} 
+		cur = min;	
+	}
+	
+	printf("各顶点到零号顶点的最短距离是：\n");
+	for(i = 0; i < 6; i++) {
+		printf("%d ", dis[i]);
+	}
+	
+	return 0;
+}
