@@ -1,0 +1,104 @@
+/*堆排序(以建立最小堆，从大到小排序为例)*/
+#include<stdio.h>
+
+void swap(int *a, int *b) {
+	int tmp;
+	
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+/*William方法建堆*/
+void WilliamHeap(int *a, int n) {
+	int i;
+	int tmpIndex;
+	
+	for(i = 1; i < n; i++) {
+		tmpIndex = i;
+		while(a[tmpIndex] < a[(tmpIndex-1)/2]) {	
+			swap(&a[tmpIndex], &a[(tmpIndex-1)/2]);
+			if(tmpIndex-1 > 0) {
+				tmpIndex = (tmpIndex-1) / 2;
+			} else {
+				break;
+			}
+		}
+	}
+}
+
+/*Floyd方法建堆*/
+void FloydHeap(int *a, int n) {
+	int i;
+	int tmpIndex;
+	int minIndex;
+	
+	for(i = n/2-1; i >= 0; i--) {
+		tmpIndex = i;
+		while(tmpIndex <= n/2-1) {
+			minIndex = tmpIndex;
+			if(2*tmpIndex+1 < n && a[2*tmpIndex+1] < a[minIndex]) {
+				minIndex = 2*tmpIndex+1;
+			}
+			if(2*tmpIndex+2 < n && a[2*tmpIndex+2] < a[minIndex]) {
+				minIndex = 2*tmpIndex+2;
+			}
+			if(minIndex != tmpIndex) {
+				swap(&a[minIndex], &a[tmpIndex]);
+				tmpIndex = minIndex;
+			} else {
+				break;
+			}
+		}
+	}
+}
+
+/*堆排序*/
+void heapSort(int *a, int n) {
+	int i;
+	int tmpIndex;
+	int minIndex;
+	
+	i = n;
+	while(i > 0) {
+		swap(&a[i-1], &a[0]);
+		i--;
+		tmpIndex = 0;
+		while(tmpIndex <= i/2-1) {
+			minIndex = tmpIndex;
+			if(2*tmpIndex+1 < i && a[2*tmpIndex+1] < a[minIndex]) {
+				minIndex = 2*tmpIndex+1;
+			}
+			if(2*tmpIndex+2 < i && a[2*tmpIndex+2] < a[minIndex]) {
+				minIndex = 2*tmpIndex+2;
+			}
+			if(minIndex != tmpIndex) {
+				swap(&a[minIndex], &a[tmpIndex]);
+				tmpIndex = minIndex;
+			} else {
+				break;
+			}
+		}
+	}
+} 
+
+
+int main(void) {
+	int a[100] = {0};
+	int n;
+	int i;
+	
+	scanf("%d", &n);
+	for(i = 0; i < n; i++) {
+		scanf("%d", &a[i]); 
+	}
+	
+	FloydHeap(a, 14);
+	heapSort(a, 14);
+	
+	for(i = 0; i < 14; i++) {
+		printf("%d ", a[i]);
+	}
+	
+	return 0;
+}
