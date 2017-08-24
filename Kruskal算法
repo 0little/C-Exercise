@@ -1,0 +1,152 @@
+/*Kruskal算法之图的最小生成树*/
+#include<stdio.h>
+
+//为了方便排序，这里创建了一个结构体用来存储边的关系 
+#define LOW -1
+#define HIGH 1
+#define EQ   0
+
+int f[6] = {0}, sum = 0, count = 0;
+
+typedef struct {
+	int u;
+	int v;
+	int w;
+}USER_TYPE;
+
+int compare(USER_TYPE a, USER_TYPE b) {
+	if(a.w < b.w) {
+		return LOW;
+	}
+	if(a.w > b.w) {
+		return HIGH;
+	}
+	if(a.w == b.w) {
+		return EQ;
+	}
+}
+
+void assign(USER_TYPE *a, USER_TYPE *b) {
+	USER_TYPE tmp;
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+
+int swap(USER_TYPE *data, int start, int end, int (*cmp)(USER_TYPE, USER_TYPE),
+    void (*assign)(USER_TYPE *, USER_TYPE *));
+void qs(USER_TYPE *data, int start, int end);
+int getf(int v); //并查集找祖先的函数
+int merge(int v, int u); //并查集合并两子集合的函数 
+
+int merge(int v, int u) {
+	int t1, t2;
+	t1 = getf(v);
+	t2 = getf(u);
+	if(t1 != t2) { //判断两个点是否在同一个集合中
+		f[t2] = t1; 
+		return 1;
+	}
+	return 0;
+}
+
+int getf(int v) {
+	if(f[v] == v) {
+		return v;
+	} else {
+		//这里是路径压缩
+		f[v] = getf(f[v]);
+		return f[v]; 
+	}
+} 
+
+void qs(USER_TYPE *data, int start, int end) {
+	int middle;
+	
+	if(start < end) {
+		middle = swap(data, start, end, compare, assign);
+		qs(data, start, middle);
+		qs(data, middle+1, end);
+	}
+}
+
+int swap(USER_TYPE *data, int start, int end, int (*cmp)(USER_TYPE, USER_TYPE),
+	void (*assign)(USER_TYPE *, USER_TYPE *)) {
+		
+	USER_TYPE tmp = data[start];
+	int head = start;
+	int tail = end-1;
+	
+	while(head < tail) {
+		while(head < tail && cmp(data[tail], tmp) >= 0) {
+			tail--;
+		}
+		if(head < tail) {
+			//把data[tail]的值赋给data[head] 
+			assign(&data[head], &data[tail]);
+			//data[head] = data[tail];
+			head++;
+		}
+		while(head < tail && cmp(data[head], tmp) <= 0) {
+			head++;
+		}
+		if(head < tail) {
+			assign(&data[tail], &data[head]);
+			//data[tail] = data[head];
+			tail--;
+		}
+	}
+	
+	data[head] = tmp;
+	
+	//返回中间点 
+	return head;
+}
+
+int main(void) {
+	int i;
+	int n;
+	int m;
+	USER_TYPE edge[9] = {
+		{1, 3, 11},
+		{2, 4, 13},
+		{3, 5, 3},
+		{4, 5, 4},
+		{1, 2, 6},
+		{3, 4, 7},
+		{0, 1, 1},
+		{2, 3, 9},
+		{0, 2, 2},
+	};
+	
+	
+	//根据边权值进行排序
+	qs(edge, 0, 9); 
+	
+	for(i = 0; i < 9; i++) {
+		printf("%d %d %d\n", edge[i].u, edge[i].v, edge[i].w);
+	}
+	
+	//初始化并查集
+	for(i = 0; i < 6; i++) {
+		f[i] = i;
+	} 
+	
+	for(i = 0; i < 9; i++) {
+		//判断一条边的两个顶点是否连通
+		if(merge(edge[i].u, edge[i].v)) {
+			//尚未连通,则连通这两个顶点 
+			count++;
+			sum += edge[i].w; 
+		}
+		//直到选用了n-1条边后退出循环
+		if(count == 6) {
+			break;
+		} 
+	}
+	
+	printf("%d", sum);
+	
+	return 0;
+}
