@@ -1,0 +1,46 @@
+/*
+某生产零件的工厂为方便管理场内生产的零件种类，现将他们生产的零件从低等到高等零件排序，
+序号分别为1,2..n，已知该厂的任意几个低等的零件可以组合成更高等的零件，零件的序号代表
+了零件的等级，比如5号零件可以由1号和4号零件组合而成，也可以有2号和3号零件组合而成。
+现有一个序号为 x 的零件，它是由 n 个序号在[a,b]区间内的零件组合而成，求n 个序号在[a,b]
+区间内的零件组合为 x 零件的概率
+输入：
+一行输入四个整数依次为n，a，b，x，用空格分隔。数据规模和约定
+对于50%的数据，n≤5.
+对于100%的数据，n≤100,b≤100. 
+输出：
+输出一行为组合为 x 零件的概率，小数点后保留四位小数。 
+*/
+
+#include<stdio.h>
+
+int getres(int n, int a, int b, int x) {
+  if (a > b) return 0;
+  if (n == 1) {
+    return x >= a && x <= b ? 1 : 0;
+  }
+  int sum = 0;
+  for (int i = a; i <= b; i++) {
+    sum += getres(n - 1, a, b, x - i);
+  }
+  return sum;
+}
+
+int getcnt(int sz, int n) {
+  int res = 1;
+  for (int i = 0; i < n; i++) {
+    res *= sz;
+  }
+  return res;
+}
+
+int main() {
+  int n, a, b, x;
+  float num;
+  
+  scanf("%d%d%d%d", &n, &a, &b, &x); 
+  num =  (float)getres(n, a, b, x) / (getcnt(b - a + 1, n));
+  printf("%.4f\n", num);
+  
+  return 0;
+}
